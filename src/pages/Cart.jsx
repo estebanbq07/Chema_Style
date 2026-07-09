@@ -20,18 +20,26 @@ export default function Cart() {
       <h2>Tu carrito</h2>
       <div className="cart-list">
         {items.map(item => (
-          <div className="cart-row" key={`${item.id}-${item.size}`}>
+          <div className="cart-row" key={item.lineId}>
             <div className="cart-row-info">
               <h4>{item.name}</h4>
               <span className="mono">Talla {item.size}</span>
+              {(item.playerName || item.playerNumber) && (
+                <span className="mono cart-custom">
+                  {item.playerName || '—'} {item.playerNumber ? `#${item.playerNumber}` : ''}
+                </span>
+              )}
+              {item.patches?.length > 0 && (
+                <span className="mono cart-custom">{item.patches.length} parche(s)</span>
+              )}
             </div>
             <div className="cart-row-qty">
-              <button onClick={() => updateQty(item.id, item.size, item.qty - 1)}>−</button>
+              <button onClick={() => updateQty(item.lineId, item.qty - 1)}>−</button>
               <span className="mono">{item.qty}</span>
-              <button onClick={() => updateQty(item.id, item.size, item.qty + 1)}>+</button>
+              <button onClick={() => updateQty(item.lineId, item.qty + 1)}>+</button>
             </div>
             <div className="cart-row-price mono">₡{(item.price * item.qty).toLocaleString('es-CR')}</div>
-            <button className="remove-btn" onClick={() => removeItem(item.id, item.size)} aria-label={`Quitar ${item.name}`}>×</button>
+            <button className="remove-btn" onClick={() => removeItem(item.lineId)} aria-label={`Quitar ${item.name}`}>×</button>
           </div>
         ))}
       </div>

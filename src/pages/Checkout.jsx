@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext.jsx'
+import { supabase } from '../services/supabaseClient.js'
 
 const PAYMENT_INFO = {
   transferencia: {
@@ -25,9 +26,57 @@ export default function Checkout() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  function handleConfirm(e) {
+ const [submitting, setSubmitting] = useState(false)
+const [submitError, setSubmitError] = useState('')
+
+async function handleConfirm(e) {
     e.preventDefault()
-    // Acá luego se conecta con el backend (crear el pedido, guardar comprobante, etc.)
+    setSubmitting(true)
+    setSubmitError('')
+
+    // 1. Crear el pedido
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .insert({
+        customer_name: form.nombre,
+        phone: form.telefono,
+        address: form.direccion,
+        payment_method: method,
+        total,
+      })
+      .select()
+      .single()
+
+    if (orderError) {
+      console.error('Error creando el pedido:', orderError)
+      setSubmitError('No pudimos guardar tu pedido. Intentá de nuevo.')
+      setSubmitting(false)
+      return
+    }
+
+    // 2. Guardar cada camisola del carrito, ligada a ese pedido
+    const orderItems = items.map(item => ({
+      order_id: order.id,
+      product_id: item.id,
+      product_name: item.name,
+      size: item.size,
+      player_name: item.playerName || null,
+      player_number: item.playerNumber || null,
+      patches: item.patches || [],
+      unit_price: item.price,
+      qty: item.qty,
+    }))
+
+    const { error: itemsError } = await supabase.from('order_items').insert(orderItems)
+
+    if (itemsError) {
+      console.error('Error guardando los items del pedido:', itemsError)
+      setSubmitError('El pedido se creó pero hubo un problema guardando los detalles. Escribinos para confirmar.')
+      setSubmitting(false)
+      return
+    }
+
+    setSubmitting(false)
     setConfirmed(true)
     clearCart()
   }
@@ -102,15 +151,22 @@ export default function Checkout() {
             )}
             <p className="hint">Después de pagar, confirmá el pedido aquí abajo y envianos el comprobante por WhatsApp.</p>
           </div>
-
-          <button type="submit" className="btn-primary"><span>Ya pagué, confirmar pedido</span></button>
+          {submitError && <p className="checkout-error">{submitError}</p>}
+          <button type="submit" className="btn-primary" disabled={submitting}>
+            <span>{submitting ? 'Guardando pedido...' : 'Ya pagué, confirmar pedido'}</span>
+          </button>
         </div>
 
         <aside className="order-summary">
           <h3>Resumen del pedido</h3>
           {items.map(item => (
-            <div className="summary-row" key={`${item.id}-${item.size}`}>
-              <span>{item.name} × {item.qty} ({item.size})</span>
+            <div className="summary-row" key={item.lineId}>
+              <span>
+                {item.name} × {item.qty} ({item.size})
+                {(item.playerName || item.playerNumber) && (
+                  <> — {item.playerName || '—'} {item.playerNumber ? `#${item.playerNumber}` : ''}</>
+                )}
+              </span>
               <span className="mono">₡{(item.price * item.qty).toLocaleString('es-CR')}</span>
             </div>
           ))}

@@ -2,28 +2,51 @@ import { createContext, useContext, useState, useMemo } from 'react'
 
 const CartContext = createContext(null)
 
+// Precio extra por cada personalización (ajustá estos valores si querés)
+export const CUSTOMIZATION_PRICES = {
+  patch: 2500,   // por cada parche agregado
+  number: 3000,  // por poner número
+  name: 3000,    // por poner nombre
+}
+
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([]) // [{ id, name, price, qty, size }]
+  const [items, setItems] = useState([])
+  // cada item: { lineId, id, name, price, qty, size, playerName, playerNumber, patches: [] }
 
-  function addItem(product, size = 'M') {
-    setItems(prev => {
-      const existing = prev.find(i => i.id === product.id && i.size === size)
-      if (existing) {
-        return prev.map(i =>
-          i.id === product.id && i.size === size ? { ...i, qty: i.qty + 1 } : i
-        )
-      }
-      return [...prev, { id: product.id, name: product.name, price: product.price, size, qty: 1 }]
-    })
+  function addItem(product, customization) {
+    const { size = 'M', playerName = '', playerNumber = '', patches = [] } = customization || {}
+
+    const extra =
+      (playerName ? CUSTOMIZATION_PRICES.name : 0) +
+      (playerNumber ? CUSTOMIZATION_PRICES.number : 0) +
+      patches.length * CUSTOMIZATION_PRICES.patch
+
+    const lineId = `${product.id}-${size}-${playerName}-${playerNumber}-${patches.join(',')}-${Date.now()}`
+
+    setItems(prev => [
+      ...prev,
+      {
+        lineId,
+        id: product.id,
+        name: product.name,
+        basePrice: product.price,
+        price: product.price + extra,
+        qty: 1,
+        size,
+        playerName,
+        playerNumber,
+        patches,
+      },
+    ])
   }
 
-  function removeItem(id, size) {
-    setItems(prev => prev.filter(i => !(i.id === id && i.size === size)))
+  function removeItem(lineId) {
+    setItems(prev => prev.filter(i => i.lineId !== lineId))
   }
 
-  function updateQty(id, size, qty) {
-    if (qty < 1) return removeItem(id, size)
-    setItems(prev => prev.map(i => (i.id === id && i.size === size ? { ...i, qty } : i)))
+  function updateQty(lineId, qty) {
+    if (qty < 1) return removeItem(lineId)
+    setItems(prev => prev.map(i => (i.lineId === lineId ? { ...i, qty } : i)))
   }
 
   function clearCart() {

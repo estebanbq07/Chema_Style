@@ -1,9 +1,10 @@
+import { useState } from 'react'
 import JerseySVG from './JerseySVG.jsx'
 import Tag from './Tag.jsx'
-import { useCart } from '../context/CartContext.jsx'
+import CustomizeModal from './CustomizeModal.jsx'
 
 export default function ProductCard({ product }) {
-  const { addItem } = useCart()
+  const [showModal, setShowModal] = useState(false)
 
   return (
     <div className="card">
@@ -26,12 +27,14 @@ export default function ProductCard({ product }) {
         </Tag>
         <button
           className="add-btn"
-          aria-label={`Agregar ${product.name} al carrito`}
-          onClick={() => addItem(product)}
+          aria-label={`Personalizar y añadir ${product.name} al carrito`}
+          onClick={() => setShowModal(true)}
         >
           +
         </button>
       </div>
+
+      {showModal && <CustomizeModal product={product} onClose={() => setShowModal(false)} />}
     </div>
   )
 }
