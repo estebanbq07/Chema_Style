@@ -16,7 +16,7 @@ export default function App() {
         </Routes>
       </main>
       <footer>
-        <span>© 2026 Chema Style — Camisolas deportivas</span>
+        <span>© 2026 Chema Style — Camisetas deportivas</span>
         <span className="mono">San José, Costa Rica</span>
       </footer>
     </>
