@@ -441,7 +441,15 @@ h1 span { color: var(--accent); }
 .modal-total { display: flex; justify-content: space-between; font-size: 1rem; }
 .modal-total .mono { color: var(--accent); font-size: 1.2rem; font-family: 'Space Mono', monospace; }
 .modal-footer .btn-primary { width: 100%; }
-
+.checkout-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 /* --- FOOTER --- */
 footer {
   border-top: 1px solid var(--border);

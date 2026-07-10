@@ -28,35 +28,12 @@ export default function Checkout() {
 
  const [submitting, setSubmitting] = useState(false)
 const [submitError, setSubmitError] = useState('')
-
 async function handleConfirm(e) {
     e.preventDefault()
     setSubmitting(true)
     setSubmitError('')
 
-    // 1. Crear el pedido
-    const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .insert({
-        customer_name: form.nombre,
-        phone: form.telefono,
-        address: form.direccion,
-        payment_method: method,
-        total,
-      })
-      .select()
-      .single()
-
-    if (orderError) {
-      console.error('Error creando el pedido:', orderError)
-      setSubmitError('No pudimos guardar tu pedido. Intentá de nuevo.')
-      setSubmitting(false)
-      return
-    }
-
-    // 2. Guardar cada camisola del carrito, ligada a ese pedido
     const orderItems = items.map(item => ({
-      order_id: order.id,
       product_id: item.id,
       product_name: item.name,
       size: item.size,
@@ -67,11 +44,18 @@ async function handleConfirm(e) {
       qty: item.qty,
     }))
 
-    const { error: itemsError } = await supabase.from('order_items').insert(orderItems)
+    const { error } = await supabase.rpc('create_order', {
+      p_customer_name: form.nombre,
+      p_phone: form.telefono,
+      p_address: form.direccion,
+      p_payment_method: method,
+      p_total: total,
+      p_items: orderItems,
+    })
 
-    if (itemsError) {
-      console.error('Error guardando los items del pedido:', itemsError)
-      setSubmitError('El pedido se creó pero hubo un problema guardando los detalles. Escribinos para confirmar.')
+    if (error) {
+      console.error('Error creando el pedido:', error)
+      setSubmitError('No pudimos guardar tu pedido. Intentá de nuevo.')
       setSubmitting(false)
       return
     }
