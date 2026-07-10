@@ -461,6 +461,75 @@ footer {
   font-size: 0.82rem;
 }
 
+.auth-page {
+  padding: 6vh 6vw 10vh;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.auth-page h2 {
+  font-family: 'Anton', sans-serif;
+  text-transform: uppercase;
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 28px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 18px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+}
+
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+}
+
+.auth-form input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-error {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.nav-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.nav-user span {
+  display: inline-block;
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; }
   .hero-num { display: none; }

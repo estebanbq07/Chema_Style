@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext.jsx'
 import { useCart } from '../context/CartContext.jsx'
 import { supabase } from '../services/supabaseClient.js'
 
@@ -16,11 +17,24 @@ const PAYMENT_INFO = {
 }
 
 export default function Checkout() {
+  const { user, profile } = useAuth()
   const { items, total, clearCart } = useCart()
   const navigate = useNavigate()
   const [method, setMethod] = useState('sinpe')
   const [form, setForm] = useState({ nombre: '', telefono: '', direccion: '' })
   const [confirmed, setConfirmed] = useState(false)
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+  }, [user, navigate])
+
+  useEffect(() => {
+    if (profile?.full_name) {
+      setForm(current => ({ ...current, nombre: profile.full_name }))
+    }
+  }, [profile])
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -45,6 +59,7 @@ async function handleConfirm(e) {
     }))
 
     const { error } = await supabase.rpc('create_order', {
+      p_user_id: user?.id,
       p_customer_name: form.nombre,
       p_phone: form.telefono,
       p_address: form.direccion,
