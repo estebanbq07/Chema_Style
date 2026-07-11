@@ -8,30 +8,37 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  async function loadProfile(userId) {
+    if (!userId) {
+      setProfile(null)
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single()
+
+    if (!error && data) {
+      setProfile(data)
+    } else {
+      setProfile(null)
+    }
+  }
+
   async function loadUserFromSession() {
     setLoading(true)
     try {
-      let currentUser = null
-      try {
-        const { data } = await supabase.auth.getSession()
-        currentUser = data?.session?.user ?? null
-      } catch {
-        // fallback for older client versions
-        const { data: ud } = await supabase.auth.getUser?.() ?? { data: null }
-        currentUser = ud?.user ?? null
-      }
-
+      const { data } = await supabase.auth.getSession()
+      const currentUser = data?.session?.user ?? null
       setUser(currentUser)
       if (currentUser) {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single()
-        if (!error) setProfile(data)
-      } else {
-        setProfile(null)
+        await loadProfile(currentUser.id)
       }
+    } catch (error) {
+      setUser(null)
+      setProfile(null)
     } finally {
       setLoading(false)
     }
@@ -40,45 +47,33 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     loadUserFromSession()
 
-    const listener = supabase.auth.onAuthStateChange((event, session) => {
-      const u = session?.user ?? null
-      setUser(u)
-      if (u) {
-        supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', u.id)
-          .single()
-          .then(({ data, error }) => {
-            if (!error) setProfile(data)
-          })
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      const currentUser = session?.user ?? null
+      setUser(currentUser)
+      if (currentUser) {
+        loadProfile(currentUser.id)
       } else {
         setProfile(null)
       }
     })
 
     return () => {
-      try {
-        // support different unsubscribe shapes
-        if (listener?.data?.subscription) listener.data.subscription.unsubscribe()
-        else if (listener?.subscription) listener.subscription.unsubscribe()
-        else if (typeof listener === 'function') listener()
-      } catch (e) {
-        // ignore
-      }
+      authListener?.subscription?.unsubscribe()
     }
   }, [])
 
   async function signUp(email, password, fullName) {
     setLoading(true)
     try {
-      const res = await supabase.auth.signUp({ email, password, options: { data: { full_name: fullName } } })
-      // if user created, try to update profile with name (trigger may create profile)
-      const userId = res?.data?.user?.id ?? res?.user?.id
-      if (userId && fullName) {
-        await supabase.from('profiles').update({ full_name: fullName }).eq('id', userId)
-      }
-      return res
+      return await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
+        },
+      })
     } finally {
       setLoading(false)
     }
@@ -87,8 +82,7 @@ export function AuthProvider({ children }) {
   async function signIn(email, password) {
     setLoading(true)
     try {
-      const res = await supabase.auth.signInWithPassword({ email, password })
-      return res
+      return await supabase.auth.signInWithPassword({ email, password })
     } finally {
       setLoading(false)
     }

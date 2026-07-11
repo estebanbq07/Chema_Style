@@ -20,13 +20,17 @@ export default function Navbar() {
           <li><a href="#">Contacto</a></li>
         </ul>
       </nav>
-      <div>
-        <Link to="/carrito">
-          <button className="cart-btn">CARRITO ({count})</button>
-        </Link>
+      <div className="header-actions">        <Link to="/carrito">
+        <button className="cart-btn">CARRITO ({count})</button>
+      </Link>
         {user ? (
           <div className="nav-user">
             <span className="mono">{profile?.full_name || user.email}</span>
+            {profile?.role === 'admin' && (
+              <Link to="/admin">
+                <button className="cart-btn">Panel Admin</button>
+              </Link>
+            )}
             <button className="cart-btn" onClick={() => signOut()}>Cerrar sesión</button>
           </div>
         ) : (
