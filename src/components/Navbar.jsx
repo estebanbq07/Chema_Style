@@ -25,7 +25,7 @@ export default function Navbar() {
       </Link>
         {user ? (
           <div className="nav-user">
-            <span className="mono">{profile?.full_name || user.email}</span>
+            <Link to="/perfil" className="mono">{profile?.full_name || user.email}</Link>
             {profile?.role === 'admin' && (
               <Link to="/admin">
                 <button className="cart-btn">Panel Admin</button>

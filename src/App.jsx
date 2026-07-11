@@ -11,6 +11,7 @@ import AdminDashboardPage from './pages/admin/AdminDashboardPage.jsx'
 import AdminProductsPage from './pages/admin/AdminProductsPage.jsx'
 import AdminOrdersPage from './pages/admin/AdminOrdersPage.jsx'
 import AdminUsersPage from './pages/admin/AdminUsersPage.jsx'
+import ProfilePage from './pages/ProfilePage.jsx'
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/registro" element={<SignupPage />} />
+          <Route path="/perfil" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
           <Route
             path="/admin"
