@@ -8,7 +8,6 @@ const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 const VARIANTS = [
   { id: 'local', label: 'Local' },
   { id: 'visitante', label: 'Visitante' },
-  { id: 'tercera', label: 'Tercera' },
 ]
 const AVAILABLE_PATCHES = [
   { id: 'liga', label: 'Parche de Liga' },
@@ -260,7 +259,7 @@ export default function CustomizePage() {
             </div>
             <div className="summary-row">
               <span>Tipo</span>
-              <strong>{variant === 'local' ? 'Local' : variant === 'visitante' ? 'Visitante' : 'Tercera'}</strong>
+              <strong>{variant === 'local' ? 'Local' : 'Visitante'}</strong>
             </div>
             {playerName && (
               <div className="summary-row">

@@ -8,7 +8,6 @@ const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 const VARIANTS = [
   { id: 'local', label: 'Local' },
   { id: 'visitante', label: 'Visitante' },
-  { id: 'tercera', label: 'Tercera' },
 ]
 
 export default function ProductCard({ product }) {
@@ -76,7 +75,7 @@ export default function ProductCard({ product }) {
         <Tag>
           <span className="price">₡{product.price.toLocaleString('es-CR')}</span>
           <span className="divider">|</span>
-          <span>{size} · {variant === 'local' ? 'Local' : variant === 'visitante' ? 'Visitante' : 'Tercera'}</span>
+          <span>{size} · {variant === 'local' ? 'Local' : 'Visitante'}</span>
         </Tag>
         <div className="card-actions">
           <button
