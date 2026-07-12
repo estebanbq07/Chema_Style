@@ -15,8 +15,8 @@ export default function Navbar() {
       <nav>
         <ul>
           <li><Link to="/">Catálogo</Link></li>
-          <li><a href="#">Selecciones</a></li>
-          <li><a href="#">Personalizar</a></li>
+          <li><Link to="/lista-deseos">Lista de deseos</Link></li>
+          <li><Link to="/personalizar">Personalizar</Link></li>
           <li><a href="#">Contacto</a></li>
         </ul>
       </nav>

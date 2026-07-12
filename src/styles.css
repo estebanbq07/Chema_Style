@@ -209,7 +209,39 @@ h1 span { color: var(--accent); }
 .tag .price { color: var(--accent); font-weight: 700; }
 .tag .divider { opacity: 0.3; }
 
-.card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
+.card-options {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.option-group {
+  display: grid;
+  gap: 10px;
+}
+.option-label {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+.variant-options { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; gap: 12px; }
+.card-actions { display: inline-flex; align-items: center; gap: 8px; }
+.favorite-btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.favorite-btn.active {
+  border-color: #ef4444;
+  background: #fef2f2;
+  color: #b91c1c;
+}
 .add-btn {
   background: #fff;
   border: 1px solid var(--primary);

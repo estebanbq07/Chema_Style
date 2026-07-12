@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Home from './pages/Home.jsx'
 import Cart from './pages/Cart.jsx'
 import Checkout from './pages/Checkout.jsx'
+import CustomizePage from './pages/CustomizePage.jsx'
 import LoginPage from './pages/auth/LoginPage.jsx'
 import SignupPage from './pages/auth/SignupPage.jsx'
 import AdminLayout from './components/admin/AdminLayout.jsx'
@@ -12,6 +13,7 @@ import AdminProductsPage from './pages/admin/AdminProductsPage.jsx'
 import AdminOrdersPage from './pages/admin/AdminOrdersPage.jsx'
 import AdminUsersPage from './pages/admin/AdminUsersPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
+import FavoritesPage from './pages/FavoritesPage.jsx'
 
 export default function App() {
   return (
@@ -21,6 +23,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/carrito" element={<Cart />} />
+          <Route path="/personalizar" element={<CustomizePage />} />
+          <Route path="/personalizar/:id" element={<CustomizePage />} />
+          <Route path="/lista-deseos" element={<FavoritesPage />} />
           <Route
             path="/checkout"
             element={

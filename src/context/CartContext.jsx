@@ -14,14 +14,14 @@ export function CartProvider({ children }) {
   // cada item: { lineId, id, name, price, qty, size, playerName, playerNumber, patches: [] }
 
   function addItem(product, customization) {
-    const { size = 'M', playerName = '', playerNumber = '', patches = [] } = customization || {}
+    const { size = 'M', variant = 'local', playerName = '', playerNumber = '', patches = [] } = customization || {}
 
     const extra =
       (playerName ? CUSTOMIZATION_PRICES.name : 0) +
       (playerNumber ? CUSTOMIZATION_PRICES.number : 0) +
       patches.length * CUSTOMIZATION_PRICES.patch
 
-    const lineId = `${product.id}-${size}-${playerName}-${playerNumber}-${patches.join(',')}-${Date.now()}`
+    const lineId = `${product.id}-${variant}-${size}-${playerName}-${playerNumber}-${patches.join(',')}-${Date.now()}`
 
     setItems(prev => [
       ...prev,
@@ -32,6 +32,7 @@ export function CartProvider({ children }) {
         basePrice: product.price,
         price: product.price + extra,
         qty: 1,
+        variant,
         size,
         playerName,
         playerNumber,

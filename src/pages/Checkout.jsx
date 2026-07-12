@@ -50,6 +50,7 @@ async function handleConfirm(e) {
     const orderItems = items.map(item => ({
       product_id: item.id,
       product_name: item.name,
+      variant: item.variant || 'local',
       size: item.size,
       player_name: item.playerName || null,
       player_number: item.playerNumber || null,
@@ -161,7 +162,7 @@ async function handleConfirm(e) {
           {items.map(item => (
             <div className="summary-row" key={item.lineId}>
               <span>
-                {item.name} × {item.qty} ({item.size})
+                {item.name} × {item.qty} ({item.variant ? `${item.variant.charAt(0).toUpperCase()}${item.variant.slice(1)}` : 'Local'} / {item.size})
                 {(item.playerName || item.playerNumber) && (
                   <> — {item.playerName || '—'} {item.playerNumber ? `#${item.playerNumber}` : ''}</>
                 )}

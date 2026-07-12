@@ -23,7 +23,7 @@ export default function Cart() {
           <div className="cart-row" key={item.lineId}>
             <div className="cart-row-info">
               <h4>{item.name}</h4>
-              <span className="mono">Talla {item.size}</span>
+              <span className="mono">{item.variant ? `${item.variant.charAt(0).toUpperCase()}${item.variant.slice(1)}` : 'Local'} · Talla {item.size}</span>
               {(item.playerName || item.playerNumber) && (
                 <span className="mono cart-custom">
                   {item.playerName || '—'} {item.playerNumber ? `#${item.playerNumber}` : ''}

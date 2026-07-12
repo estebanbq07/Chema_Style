@@ -49,7 +49,7 @@ export default function Home() {
           <p>Camisetas deportivas vesriones jugador y fan, con tela de gran calidad. Diseñadas para la cancha, hechas para la calle.</p>
           <div className="hero-cta">
             <a href="#catalogo"><button className="btn-primary"><span>Ver catálogo</span></button></a>
-            <a href="#" className="btn-ghost">Personalizar mi camiseta →</a>
+            <Link to="/personalizar" className="btn-ghost">Personalizar mi camiseta →</Link>
           </div>
         </div>
         {/*
