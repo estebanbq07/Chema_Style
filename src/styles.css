@@ -1473,6 +1473,81 @@ footer {
   margin-top: 0;
 }
 
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea,
+.checkout-form input,
+.checkout-form select,
+.checkout-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+}
+
+.admin-form input:focus-visible,
+.admin-form select:focus-visible,
+.admin-form textarea:focus-visible,
+.checkout-form input:focus-visible,
+.checkout-form select:focus-visible,
+.checkout-form textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.admin-products .checkout-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.admin-products .checkout-form > label:nth-last-child(-n+2) {
+  grid-column: span 2;
+}
+
+.admin-products .image-preview-wrapper {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: auto;
+  min-height: 140px;
+}
+
+.admin-table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  min-width: 720px;
+}
+
+.admin-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.admin-page-header button {
+  white-space: nowrap;
+}
+
 /* --- PROFILE --- */
 .profile-page {
   padding: 4vh 6vw 10vh;
@@ -1602,13 +1677,23 @@ footer {
     gap: 18px;
   }
 
-  .customize-form,
-  .customize-summary,
   .admin-sidebar,
   .admin-card,
-  .admin-form,
-  .order-summary {
+  .admin-form {
     padding: 24px;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+  }
+
+  .admin-content {
+    width: 100%;
+  }
+
+  .admin-page-header {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .product-summary {
@@ -1743,5 +1828,30 @@ footer {
 
   .admin-page-header h2 {
     font-size: 1.5rem;
+  }
+
+  .admin-products .checkout-form,
+  .admin-orders .admin-table,
+  .admin-users .admin-table {
+    min-width: 100%;
+  }
+
+  .admin-orders select,
+  .admin-users select,
+  .admin-form select,
+  .checkout-form select {
+    width: 100%;
+  }
+
+  .admin-orders .admin-table th,
+  .admin-orders .admin-table td,
+  .admin-users .admin-table th,
+  .admin-users .admin-table td {
+    white-space: nowrap;
+  }
+
+  .admin-actions-row {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
