@@ -20,83 +20,49 @@ export function AuthProvider({ children }) {
       .eq('id', userId)
       .single()
 
-    if (!error && data) {
-      setProfile(data)
-    } else {
-      setProfile(null)
-    }
-  }
-
-  async function loadUserFromSession() {
-    setLoading(true)
-    try {
-      const { data } = await supabase.auth.getSession()
-      const currentUser = data?.session?.user ?? null
-      setUser(currentUser)
-      if (currentUser) {
-        await loadProfile(currentUser.id)
-      }
-    } catch (error) {
-      setUser(null)
-      setProfile(null)
-    } finally {
-      setLoading(false)
-    }
+    setProfile(!error && data ? data : null)
   }
 
   useEffect(() => {
-    loadUserFromSession()
+    let isMounted = true
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       const currentUser = session?.user ?? null
+      if (!isMounted) return
+
       setUser(currentUser)
+
       if (currentUser) {
-        loadProfile(currentUser.id)
+        await loadProfile(currentUser.id)
       } else {
         setProfile(null)
       }
+
+      setLoading(false)
     })
 
     return () => {
+      isMounted = false
       authListener?.subscription?.unsubscribe()
     }
   }, [])
 
   async function signUp(email, password, fullName) {
-    setLoading(true)
-    try {
-      return await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-        },
-      })
-    } finally {
-      setLoading(false)
-    }
+    return supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: fullName } },
+    })
   }
 
   async function signIn(email, password) {
-    setLoading(true)
-    try {
-      return await supabase.auth.signInWithPassword({ email, password })
-    } finally {
-      setLoading(false)
-    }
+    return supabase.auth.signInWithPassword({ email, password })
   }
 
   async function signOut() {
-    setLoading(true)
-    try {
-      await supabase.auth.signOut()
-      setUser(null)
-      setProfile(null)
-    } finally {
-      setLoading(false)
-    }
+    await supabase.auth.signOut()
+    setUser(null)
+    setProfile(null)
   }
 
   return (
