@@ -1597,6 +1597,11 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .admin-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
   .customize-form,
   .customize-summary,
   .admin-sidebar,
@@ -1721,5 +1726,22 @@ footer {
   .profile-header {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .admin-sidebar {
+    padding: 22px;
+  }
+
+  .admin-content {
+    width: 100%;
+  }
+
+  .admin-page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-page-header h2 {
+    font-size: 1.5rem;
   }
 }
