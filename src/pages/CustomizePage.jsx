@@ -58,12 +58,16 @@ export default function CustomizePage() {
         console.error('Error cargando producto:', error)
         setProduct(null)
       } else if (data) {
+        // Log para verificar que las columnas lleguen correctamente
+        console.log('Producto obtenido desde Supabase:', data)
+        
         setProduct({
           id: data.id,
           name: data.name,
           cat: data.category,
           price: data.price,
-          image: data.image_url,
+          imagen_url_local: data.imagen_url_local,
+          imagen_url_visitante: data.imagen_url_visitante,
           color: data.color,
           num: data.jersey_num,
         })
@@ -150,11 +154,19 @@ export default function CustomizePage() {
         <div className="customize-form">
           <div className="product-summary">
             <div className="modal-preview">
-              {product.image ? (
-                <img src={product.image} alt={product.name} className="card-photo" />
-              ) : (
-                <JerseySVG color={product.color} num={playerNumber || product.num} stroke={product.stroke} dark={product.dark} />
-              )}
+              {(() => {
+                // Calcular la imagen actual según el tipo de camiseta seleccionado
+                const imagenActual =
+                  variant === 'visitante' && product.imagen_url_visitante
+                    ? product.imagen_url_visitante
+                    : product.imagen_url_local
+                
+                return imagenActual ? (
+                  <img src={imagenActual} alt={`${product.name} - ${variant}`} className="card-photo" />
+                ) : (
+                  <JerseySVG color={product.color} num={playerNumber || product.num} stroke={product.stroke} dark={product.dark} />
+                )
+              })()}
             </div>
             <div>
               <h3>{product.name}</h3>

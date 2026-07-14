@@ -26,8 +26,8 @@ export default function FavoritesPage() {
         {favorites.map(product => (
           <div key={product.id} className="card">
             <div className="card-jersey">
-              {product.image ? (
-                <img src={product.image} alt={product.name} className="card-photo" />
+              {product.imagen_url_local ? (
+                <img src={product.imagen_url_local} alt={product.name} className="card-photo" />
               ) : (
                 <div style={{ width: '120px', height: '144px', display: 'grid', placeItems: 'center', color: '#6b7280' }}>
                   Sin imagen

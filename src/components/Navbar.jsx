@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useCart } from '../context/CartContext.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
@@ -46,16 +46,53 @@ export default function Navbar() {
 
       <nav className="nav">
         <ul className={`nav-list ${open ? 'open' : ''}`}>
-          <li><Link to="/" onClick={() => setOpen(false)}>Catálogo</Link></li>
-          <li><Link to="/lista-deseos" onClick={() => setOpen(false)}>Favoritos</Link></li>
-          <li><Link to="/personalizar" onClick={() => setOpen(false)}>Personalizar</Link></li>
-          <li><a href="#" onClick={() => setOpen(false)}>Contacto</a></li>
+          <li>
+            <NavLink
+              to="/"
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={() => setOpen(false)}
+            >
+              Inicio
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/catalogo"
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={() => setOpen(false)}
+            >
+              Catálogo
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/lista-deseos"
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={() => setOpen(false)}
+            >
+              Favoritos
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/personalizar"
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onClick={() => setOpen(false)}
+            >
+              Personalizar
+            </NavLink>
+          </li>
         </ul>
       </nav>
 
       <div className="header-actions">
-        <Link to="/carrito">
-          <button className="cart-btn">CARRITO ({count})</button>
+        <Link
+          to="/carrito"
+          className="cart-button"
+          aria-label="Abrir carrito"
+          title={`Abrir carrito (${count} artículos)`}
+        >
+          🛒
         </Link>
         {user ? (
           <UserMenu />

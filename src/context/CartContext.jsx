@@ -16,6 +16,12 @@ export function CartProvider({ children }) {
   function addItem(product, customization) {
     const { size = 'M', variant = 'local', playerName = '', playerNumber = '', patches = [] } = customization || {}
 
+    // Calcular la imagen actual según el tipo de camiseta seleccionado
+    const imagenActual =
+      variant === 'visitante' && product.imagen_url_visitante
+        ? product.imagen_url_visitante
+        : product.imagen_url_local
+
     const extra =
       (playerName ? CUSTOMIZATION_PRICES.name : 0) +
       (playerNumber ? CUSTOMIZATION_PRICES.number : 0) +
@@ -37,6 +43,7 @@ export function CartProvider({ children }) {
         playerName,
         playerNumber,
         patches,
+        imagenSeleccionada: imagenActual,
       },
     ])
   }

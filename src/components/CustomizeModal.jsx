@@ -13,6 +13,7 @@ const AVAILABLE_PATCHES = [
 export default function CustomizeModal({ product, onClose }) {
   const { addItem } = useCart()
   const [size, setSize] = useState('M')
+  const [tipoCamisa, setTipoCamisa] = useState('local')
   const [playerName, setPlayerName] = useState('')
   const [playerNumber, setPlayerNumber] = useState('')
   const [patches, setPatches] = useState([])
@@ -20,6 +21,12 @@ export default function CustomizeModal({ product, onClose }) {
   function togglePatch(id) {
     setPatches(prev => (prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]))
   }
+
+  // Calcular la imagen actual según el tipo de camisa seleccionado
+  const imagenActual =
+    tipoCamisa === 'visitante' && product.imagen_url_visitante
+      ? product.imagen_url_visitante
+      : product.imagen_url_local
 
   const extra =
     (playerName ? CUSTOMIZATION_PRICES.name : 0) +
@@ -29,7 +36,13 @@ export default function CustomizeModal({ product, onClose }) {
   const finalPrice = product.price + extra
 
   function handleAdd() {
-    addItem(product, { size, playerName, playerNumber: playerNumber.slice(0, 2), patches })
+    addItem(product, { 
+      variant: tipoCamisa,
+      size, 
+      playerName, 
+      playerNumber: playerNumber.slice(0, 2), 
+      patches 
+    })
     onClose()
   }
 
@@ -39,8 +52,8 @@ return createPortal(
         <button className="modal-close" onClick={onClose} aria-label="Cerrar">×</button>
 
         <div className="modal-preview">
-          {product.image ? (
-            <img src={product.image} alt={product.name} className="card-photo" />
+          {imagenActual ? (
+            <img src={imagenActual} alt={`${product.name} - ${tipoCamisa}`} className="card-photo" />
           ) : (
             <JerseySVG color={product.color} num={playerNumber || product.num} stroke={product.stroke} dark={product.dark} />
           )}
@@ -62,6 +75,28 @@ return createPortal(
                 {s}
               </button>
             ))}
+          </div>
+        </div>
+
+        <div className="modal-field">
+          <label className="modal-label">Tipo de camiseta</label>
+          <div className="variant-options">
+            <button
+              type="button"
+              className={`size-btn ${tipoCamisa === 'local' ? 'active' : ''}`}
+              onClick={() => setTipoCamisa('local')}
+            >
+              Local
+            </button>
+            {product.imagen_url_visitante && (
+              <button
+                type="button"
+                className={`size-btn ${tipoCamisa === 'visitante' ? 'active' : ''}`}
+                onClick={() => setTipoCamisa('visitante')}
+              >
+                Visitante
+              </button>
+            )}
           </div>
         </div>
 

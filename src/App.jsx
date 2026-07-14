@@ -1,7 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
-import Home from './pages/Home.jsx'
+import HomePage from './pages/HomePage.jsx'
+import Catalog from './pages/Catalog.jsx'
 import Cart from './pages/Cart.jsx'
 import Checkout from './pages/Checkout.jsx'
 import CustomizePage from './pages/CustomizePage.jsx'
@@ -21,7 +22,8 @@ export default function App() {
       <Navbar />
       <main>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/catalogo" element={<Catalog />} />
           <Route path="/carrito" element={<Cart />} />
           <Route path="/personalizar" element={<CustomizePage />} />
           <Route path="/personalizar/:id" element={<CustomizePage />} />

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../services/supabaseClient.js'
 import ProductCard from '../components/ProductCard.jsx'
 
-export default function Home() {
+export default function Catalog() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -41,33 +41,11 @@ export default function Home() {
     fetchProducts()
   }, [])
 
-
   return (
     <>
-      <section className="hero">
-        <div className="hero-num">10</div>
-        <div>
-          <div className="eyebrow">NUEVA COLECCIÓN · TALLAS S–XXL</div>
-          <h1>Vestí el <span>estilo</span><br />que te define.</h1>
-          <p>Camisetas deportivas vesriones jugador y fan, con tela de gran calidad. Diseñadas para la cancha, hechas para la calle.</p>
-          <div className="hero-cta">
-            <a href="#catalogo"><button className="btn-primary"><span>Ver catálogo</span></button></a>
-            <Link to="/personalizar" className="btn-ghost">Personalizar mi camiseta →</Link>
-          </div>
-        </div>
-        {/*
-        <div className="hero-jersey">
-          <svg viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M60 10 L20 40 L35 65 L55 55 L55 200 Q100 210 145 200 L145 55 L165 65 L180 40 L140 10 Q100 25 60 10 Z" fill="#E23744" />
-            <text x="100" y="140" fontFamily="Anton" fontSize="70" fill="#F5F7F2" textAnchor="middle">10</text>
-          </svg>
-        </div>
-        */ }
-      </section>
-
-      <section className="catalog" id="catalogo">
+      <section className="catalog">
         <div className="catalog-head">
-          <h2>Catálogo</h2>
+          <h2>Catálogo completo</h2>
           <span className="count mono">{String(products.length).padStart(2, '0')} MODELOS DISPONIBLES</span>
         </div>
         {loading ? (
